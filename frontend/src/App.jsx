@@ -4,11 +4,12 @@ import RiskGame from "./components/RiskGame";
 import PortfolioChart from "./components/PortfolioChart";
 import apiClient from "./api/client";
 import { LogOut, Loader2 } from "lucide-react";
+import LandingPage from "./components/LandingPage";
 
 export default function App() {
   // Check for an existing token in local storage so users stay logged in
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-
+  const [showAuth, setShowAuth] = useState(false);
   const [showGame, setShowGame] = useState(false);
   const [savedRiskScore, setSavedRiskScore] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -57,8 +58,24 @@ export default function App() {
   };
 
   // 1. Not Logged In -> Show Auth Screen
+  // 1. Not Logged In -> Show Landing Page OR Auth Screen
   if (!token) {
-    return <Auth setToken={setToken} />;
+    if (showAuth) {
+      return (
+        <div className="relative">
+          {/* Add a back button to return to the landing page */}
+          <button
+            onClick={() => setShowAuth(false)}
+            className="absolute top-6 left-6 text-slate-400 hover:text-white z-50 flex items-center gap-2"
+          >
+            ← Back to Home
+          </button>
+          <Auth setToken={setToken} />
+        </div>
+      );
+    }
+    // Pass the toggle function to the Landing Page
+    return <LandingPage onNavigateToAuth={setShowAuth} />;
   }
 
   // 2. Fetching Data -> Show Loading Screen
