@@ -1,10 +1,8 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // Use Railway's URL if it exists, otherwise fall back to localhost for local testing
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1",
 });
 
 // 1. Inject token into every outbound request
@@ -29,4 +27,5 @@ apiClient.interceptors.response.use(
   },
 );
 
+// Export exactly ONCE at the very end
 export default apiClient;

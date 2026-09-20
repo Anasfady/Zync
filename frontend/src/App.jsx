@@ -13,19 +13,7 @@ export default function App() {
   const [savedRiskScore, setSavedRiskScore] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
 
-  // When token changes (login or app load), fetch the user's saved profile
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem("token", token);
-      // Attach token to all future API requests automatically
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      fetchUserProfile();
-    } else {
-      localStorage.removeItem("token");
-      delete apiClient.defaults.headers.common["Authorization"];
-    }
-  }, [token]);
-
+  // 1. Declare the function FIRST so it can be accessed safely
   const fetchUserProfile = async () => {
     setLoadingProfile(true);
     try {
@@ -48,6 +36,19 @@ export default function App() {
       setLoadingProfile(false);
     }
   };
+
+  // 2. Call the function inside useEffect SECOND
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+      // Attach token to all future API requests automatically
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      fetchUserProfile();
+    } else {
+      localStorage.removeItem("token");
+      delete apiClient.defaults.headers.common["Authorization"];
+    }
+  }, [token]);
 
   const handleLogout = () => {
     setToken(null);
