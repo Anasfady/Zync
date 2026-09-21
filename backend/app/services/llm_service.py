@@ -3,8 +3,8 @@ import logging
 import os
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
-from google import genai
-
+import google.generativeai as genai
+    
 load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
