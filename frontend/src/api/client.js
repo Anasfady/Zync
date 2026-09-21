@@ -1,8 +1,11 @@
 import axios from "axios";
 
+// Use the cloud URL if it exists (Render), otherwise fall back to localhost for local testing
+const API_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://zync-rkq1.onrender.com/api/v1";
+
 const apiClient = axios.create({
-  // Use Railway's URL if it exists, otherwise fall back to localhost for local testing
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1",
+  baseURL: API_URL,
 });
 
 // 1. Inject token into every outbound request
