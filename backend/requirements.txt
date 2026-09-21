@@ -5,7 +5,8 @@ python-multipart
 email-validator
 python-jose[cryptography]
 PyJWT
-passlib[bcrypt]
+passlib
+bcrypt==4.0.1
 sqlalchemy
 psycopg2-binary
 --extra-index-url https://download.pytorch.org/whl/cpu
