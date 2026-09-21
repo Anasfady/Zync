@@ -20,6 +20,6 @@ scikit-learn
 yfinance
 requests
 python-dotenv
-google-generativeai
+google-genai
 ollama
 mockai

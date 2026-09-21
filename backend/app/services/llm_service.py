@@ -3,8 +3,8 @@ import logging
 import os
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
-import google.generativeai as genai
-    
+from google import genai
+
 load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
@@ -36,11 +36,19 @@ class OllamaProvider(LLMProvider):
         return response.json().get("response", "")
 
 # 2. SECONDARY: GEMINI (Upgraded to the 2026 Model)
-class GeminiProvider(LLMProvider):
-    def __init__(self, api_key: str):
-        self.client = genai.Client(api_key=api_key)
-        # We listened to Google's error log and updated the string!
-        self.model_name = 'gemini-3.6-flash'
+
+
+class GeminiProvider:
+    def __init__(self, api_key):
+        # Configure the API key directly
+        genai.configure(api_key=api_key)
+        # Initialize the model (you can use gemini-1.5-flash or gemini-1.5-pro)
+        self.model = genai.GenerativeModel('gemini-3.6-flash')
+
+    # Update your generate function to look like this:
+    def generate(self, prompt: str):
+        response = self.model.generate_content(prompt)
+        return response.text
 
     def generate_explanation(self, risk_score: float, allocations: dict, metrics: dict) -> str:
         prompt = f"You are a professional, Gen Z-friendly financial advisor. Explain this mathematical portfolio strategy in 3 engaging sentences. User Risk Score: {risk_score}. Allocations: {allocations}. 1-Year Backtest Metrics: {metrics}."
