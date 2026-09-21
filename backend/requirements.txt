@@ -1,8 +1,8 @@
 fastapi
-email-validator
 uvicorn[standard]
 gunicorn
 python-multipart
+email-validator
 python-jose[cryptography]
 PyJWT
 passlib[bcrypt]
@@ -20,3 +20,6 @@ scikit-learn
 yfinance
 requests
 python-dotenv
+google-genai
+ollama
+mockai
