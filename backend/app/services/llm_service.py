@@ -38,27 +38,26 @@ class OllamaProvider(LLMProvider):
 # 2. SECONDARY: GEMINI (Upgraded to the 2026 Model)
 
 
+from google import genai
+
 class GeminiProvider:
     def __init__(self, api_key):
-        # Configure the API key directly
-        genai.configure(api_key=api_key)
-        # Initialize the model (you can use gemini-1.5-flash or gemini-1.5-pro)
-        self.model = genai.GenerativeModel('gemini-3.6-flash')
+        # Initialize the new SDK Client
+        self.client = genai.Client(api_key=api_key)
+
+    def generate(self, prompt: str):
+        # The new SDK requires the model name to be passed here
+        response = self.client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt
+        )
+        return response.text
 
     # Update your generate function to look like this:
     def generate(self, prompt: str):
         response = self.model.generate_content(prompt)
         return response.text
 
-    def generate_explanation(self, risk_score: float, allocations: dict, metrics: dict) -> str:
-        prompt = f"You are a professional, Gen Z-friendly financial advisor. Explain this mathematical portfolio strategy in 3 engaging sentences. User Risk Score: {risk_score}. Allocations: {allocations}. 1-Year Backtest Metrics: {metrics}."
-        
-        logger.info("Attempting commercial generation (Gemini Fallback)...")
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=prompt
-        )
-        return response.text
 
 # 3. THE SAFETY NET: MOCKED AI
 class MockProvider(LLMProvider):
